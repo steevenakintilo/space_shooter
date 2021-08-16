@@ -83,6 +83,7 @@ def level1(screen,enemy,list,list2,list3,list4,list5,up,down):
         
 def main_loop():
     color = (255,255,255)
+    color2 = (250,0,0)
     pygame.init()
     pygame.display.set_caption('Space Shooter')
     clock = pygame.time.Clock()
@@ -98,6 +99,7 @@ def main_loop():
     space = 0
     move_up = 0
     move_down = 0
+    damage = 10
     enemy_x_pos = [310,360,380,460,480,560,580,660,680,760]
     l = [20,120,220,320,420]
     l2 = [l[0],l[1],l[2],l[3],l[4]]
@@ -105,6 +107,9 @@ def main_loop():
     l4 = [l[0],l[1],l[2],l[3],l[4]]
     l5 = [l[0],l[1],l[2],l[3],l[4]]
     while running:
+        if damage > 1290:
+            quit()
+        damage = damage + 10
         xpos = print_file("pos_y")
         pos = float(xpos)
         #space = 0
@@ -118,7 +123,7 @@ def main_loop():
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_UP] and Y > 530:
             Y = Y - 10
-        if pressed_keys[K_DOWN] and Y < 650:
+        if pressed_keys[K_DOWN] and Y < 640:
             Y = Y + 10
         if pressed_keys[K_LEFT] and X > 10:
             X = X - 10
@@ -138,6 +143,8 @@ def main_loop():
                 space = 0
                 fire_speed = 10
             shoot_fire(screen,color,int(pos),Y,fire_speed)
+        pygame.draw.rect(screen, color, pygame.Rect(0,705,1290,30))
+        pygame.draw.rect(screen, color2, pygame.Rect(0,705,1290 - damage,30))
             #pygame.draw.rect(screen, color, pygame.Rect(X + 41, Y  - fire_speed - 25, 5, 20))
         if space == 0:
             write_id("pos_y",str(X))
@@ -169,7 +176,7 @@ def main_loop():
         #print(pos_y)
         pygame.display.flip()
         clock.tick(30)
-        print(move_up)
+        print(damage)
 
 system("clear")
 main_loop()
