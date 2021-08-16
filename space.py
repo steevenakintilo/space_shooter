@@ -39,7 +39,7 @@ def random_shoot(no,list,lens):
         val = 720
     return(val)
 
-def end_loop():
+def end_loop(lvl):
     #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
@@ -64,8 +64,7 @@ def end_loop():
                 quit()
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_SPACE]:
-            menu_loop()
-        
+            check_level(lvl)
         screen.fill((0, 0, 0))
         screen.blit(background.surf,(0,0))
         pygame.display.flip()
@@ -78,7 +77,7 @@ def check_win(list):
             win = win + 1
     if win == 5:
         return (1)  
-def main_loop():
+def level1(lvl,bullet_damage):
     color = (255,255,255)
     color2 = (250,0,0)
     pygame.init()
@@ -147,7 +146,7 @@ def main_loop():
         y3 = [l2[2],l3[2],l4[2],l5[2]]
         y4 = [l2[3],l3[3],l4[3],l5[3]]
         y5 = [l2[4],l3[4],l4[4],l5[4]]
-        bullet_speed = bullet_speed + 10
+        bullet_speed = bullet_speed + bullet_damage
         if damage > 1290:
             quit()
         xpos = print_file("pos_y")
@@ -190,7 +189,8 @@ def main_loop():
             space = 0
             space = space + 1
         if check_win(last_line) == 1:
-            end_loop()
+            lvl = lvl + 1
+            end_loop(lvl)
         if move_up == 300:
             pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,bullet_speed + random_shoot2, 5, 10))
         pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,random_shoot2, 5, 10))
@@ -316,8 +316,13 @@ def main_loop():
         if l5[4] == -9999 and f5 == 0 and len(d) > 1:
             f5 = 1
             d.pop(len(d) - 5)
-        
-        #print(l5,d)
+
+def check_level(lvl):
+    if lvl == 1:
+        level1(1,10)
+    if lvl == 2:
+        level1(2,20)
+    
 write_id("pos_y","100")
 system("clear")
-main_loop()
+check_level(1)
