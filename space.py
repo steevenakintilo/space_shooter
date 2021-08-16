@@ -71,17 +71,15 @@ def shoot_fire(screen,color,X,Y,fire_speed):
     pygame.draw.rect(screen, color, pygame.Rect(X + 41,pos_y, 5, 20))
     #print(pos_y)
 
-def level1(screen,enemy,list,list2):
+def level1(screen,enemy,list,list2,list3,list4,list5):
     color = (0,0,0)
     #l2 = [list[0],list[1],list[2],list[3],list[4]]
     for i in range(5):
-        #screen.blit(enemy.surf,(list[i],20))
-        #screen.blit(enemy.surf,(list[i],120))
-        #screen.blit(enemy.surf,(list[i],220))
-        #screen.blit(enemy.surf,(list[i],320))
+        screen.blit(enemy.surf,(list5[i],20))
+        screen.blit(enemy.surf,(list4[i],120))
+        screen.blit(enemy.surf,(list3[i],220))
         screen.blit(enemy.surf,(list2[i],320))
-        #list[0] = -111
-
+        
         
 def main_loop():
     color = (255,255,255)
@@ -98,7 +96,7 @@ def main_loop():
     running = True
     fire_speed = 0
     space = 0
-    enemy_x_pos = [10,60,110,160,210,260,310,360,410,460]
+    enemy_x_pos = [10,60,80,160,180,260,280,360,380,460]
     l = [20,120,220,320,420]
     l2 = [l[0],l[1],l[2],l[3],l[4]]
     l3 = [l[0],l[1],l[2],l[3],l[4]]
@@ -127,7 +125,7 @@ def main_loop():
         screen.fill((0, 0, 0))
         screen.blit(background.surf,(0,0))
         screen.blit(player.surf,(X,Y))
-        level1(screen,enemy,l,l2)
+        level1(screen,enemy,l,l2,l3,l4,l5)
         if space != 0:
             fire_speed = fire_speed + 10
             if pos_y < 0:
@@ -143,12 +141,23 @@ def main_loop():
             #shoot_fire(screen,color,X,Y,fire_speed)
         #print(space, X)
         for i in range(10):
-            if pos_y < 385 and int(pos) >= enemy_x_pos[i] and int(pos) <= enemy_x_pos[i + 1]:
-                #print(i)
+            if pos_y < 385 and int(pos) >= enemy_x_pos[i] and int(pos) <= enemy_x_pos[i + 1] and l2[int(i/2)] != -99:
                 l2[int(i/2)] = -99
                 space = 0
                 fire_speed = 10
-        #print(int(pos))
+            if pos_y < 285 and int(pos) >= enemy_x_pos[i] and int(pos) <= enemy_x_pos[i + 1] and l2[int(i/2)] == -99 and l3[int(i/2)] != -99:
+                l3[int(i/2)] = -99
+                space = 0
+                fire_speed = 10
+            if pos_y < 185 and int(pos) >= enemy_x_pos[i] and int(pos) <= enemy_x_pos[i + 1] and l3[int(i/2)] == -99 and l4[int(i/2)] != -99:
+                l4[int(i/2)] = -99
+                space = 0
+                fire_speed = 10
+            if pos_y < 85 and int(pos) >= enemy_x_pos[i] and int(pos) <= enemy_x_pos[i + 1] and l4[int(i/2)] == -99 and l5[int(i/2)] != -99:
+                l5[int(i/2)] = -99
+                space = 0
+                fire_speed = 10
+        #print(pos_y)
         pygame.display.flip()
         clock.tick(30)
         #print(X,Y)
