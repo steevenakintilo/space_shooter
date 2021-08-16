@@ -70,7 +70,19 @@ def shoot_fire(screen,color,X,Y,fire_speed):
     pos_y = Y  - fire_speed - 25
     pygame.draw.rect(screen, color, pygame.Rect(X + 41,pos_y, 5, 20))
     #print(pos_y)
-    
+
+def level1(screen,enemy,list,list2):
+    color = (0,0,0)
+    #l2 = [list[0],list[1],list[2],list[3],list[4]]
+    for i in range(5):
+        #screen.blit(enemy.surf,(list[i],20))
+        #screen.blit(enemy.surf,(list[i],120))
+        #screen.blit(enemy.surf,(list[i],220))
+        #screen.blit(enemy.surf,(list[i],320))
+        screen.blit(enemy.surf,(list2[i],320))
+        #list[0] = -111
+
+        
 def main_loop():
     color = (255,255,255)
     pygame.init()
@@ -80,11 +92,18 @@ def main_loop():
     X = SCREEN_WIDTH/2
     Y = 630
     player = Ship("ship.png")
+    enemy = Ship("ship2.png")
     background = Background("space.png")
     boss = Boss()
     running = True
     fire_speed = 0
     space = 0
+    enemy_x_pos = [10,60,110,160,210,260,310,360,410,460]
+    l = [20,120,220,320,420]
+    l2 = [l[0],l[1],l[2],l[3],l[4]]
+    l3 = [l[0],l[1],l[2],l[3],l[4]]
+    l4 = [l[0],l[1],l[2],l[3],l[4]]
+    l5 = [l[0],l[1],l[2],l[3],l[4]]
     while running:
         xpos = print_file("pos_y")
         pos = float(xpos)
@@ -108,6 +127,7 @@ def main_loop():
         screen.fill((0, 0, 0))
         screen.blit(background.surf,(0,0))
         screen.blit(player.surf,(X,Y))
+        level1(screen,enemy,l,l2)
         if space != 0:
             fire_speed = fire_speed + 10
             if pos_y < 0:
@@ -121,7 +141,14 @@ def main_loop():
             space = 0
             space = space + 1
             #shoot_fire(screen,color,X,Y,fire_speed)
-        print(space, X)
+        #print(space, X)
+        for i in range(10):
+            if pos_y < 385 and int(pos) >= enemy_x_pos[i] and int(pos) <= enemy_x_pos[i + 1]:
+                #print(i)
+                l2[int(i/2)] = -99
+                space = 0
+                fire_speed = 10
+        #print(int(pos))
         pygame.display.flip()
         clock.tick(30)
         #print(X,Y)
