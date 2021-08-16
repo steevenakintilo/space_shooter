@@ -73,7 +73,7 @@ def shoot_fire(screen,color,X,Y,fire_speed):
     pygame.draw.rect(screen, color, pygame.Rect(X + 41,pos_y, 5, 20))
     #print(pos_y)
 
-def level1(screen,enemy,list,list2,list3,list4,list5,up,down):
+def display_enemy(screen,enemy,list,list2,list3,list4,list5,up,down):
     color = (0,0,0)
     #l2 = [list[0],list[1],list[2],list[3],list[4]]
     for i in range(5):
@@ -247,7 +247,7 @@ def main_loop():
         screen.fill((0, 0, 0))
         screen.blit(background.surf,(0,0))
         screen.blit(player.surf,(X,Y))
-        level1(screen,enemy,l,l2,l3,l4,l5,move_down,move_up)
+        display_enemy(screen,enemy,l,l2,l3,l4,l5,move_down,move_up)
         last_line = [l5[0],l5[1],l5[2],l5[3],l5[4]]
         move_up = move_up + 2
         if move_up < 300:
@@ -389,7 +389,7 @@ def main_loop():
         if l5[3] == -9999 and f4 == 0:
             f4 = 1
             d.pop(len(d) - 4)
-        if l5[4] == -9999 and f5 == 0:
+        if l5[4] == -9999 and f5 == 0 and len(d) > 1:
             f5 = 1
             d.pop(len(d) - 5)
         
