@@ -11,77 +11,10 @@ import pygame
 from random import randint
 from os import system
 import sys
+from lib import *
 sys.setrecursionlimit(1000000)
 
-def write_id(path,x):  
-    f = open(path, "w")
-    f.write(str(x))    
-    f.close            
-
-def print_file(path):
-    f = open(path, 'r')
-    content = f.read()
-    return(content)
-    f.close()
-
-from pygame.locals import (
-    RLEACCEL,
-    K_UP,
-    K_DOWN,
-    K_SPACE,
-    K_LEFT,
-    K_RIGHT,
-    K_ESCAPE,
-    KEYDOWN,
-    QUIT,
-)
-
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
-
-class Background(pygame.sprite.Sprite):
-    def __init__(self,path):
-        super(Background, self).__init__()
-        self.surf = pygame.image.load(path).convert_alpha()
-        self.rect = self.surf.get_rect()
-
-class Ship(pygame.sprite.Sprite):
-    def __init__(self,path):
-        super(Ship, self).__init__()
-        self.surf = pygame.image.load(path).convert_alpha()
-        self.rect = self.surf.get_rect()
-
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super(Player, self).__init__()
-        self.surf = pygame.Surface((75, 25))
-        self.surf.fill((0, 255, 255))
-        self.rect = self.surf.get_rect()
-
-class Boss(pygame.sprite.Sprite):
-    def __init__(self):
-        super(Boss, self).__init__()
-        self.surf = pygame.Surface((20, 10))
-        self.surf.fill((255, 255, 255))
-        self.rect = self.surf.get_rect()
-
-def display_all(screen,x,y):
-    pygame.draw.rect(screen, (255, 255, 255), (x, y), 1)
-
-def shoot_fire(screen,color,X,Y,fire_speed):
-    pos_y = Y  - fire_speed - 25
-    pygame.draw.rect(screen, color, pygame.Rect(X + 41,pos_y, 5, 20))
-    #print(pos_y)
-
-def display_enemy(screen,enemy,list,list2,list3,list4,list5,up,down):
-    color = (0,0,0)
-    #l2 = [list[0],list[1],list[2],list[3],list[4]]
-    for i in range(5):
-        screen.blit(enemy.surf,(list5[i]+down,20+up))
-        screen.blit(enemy.surf,(list4[i]+down,120+up))
-        screen.blit(enemy.surf,(list3[i]+down,220+up))
-        screen.blit(enemy.surf,(list2[i]+down,320+up))
-        
+    
 def random_shoot(no,list,lens):
     val = 0
     y = randint(1,lens)
@@ -171,43 +104,34 @@ def main_loop():
     l3 = [l[0],l[1],l[2],l[3],l[4]]
     l4 = [l[0],l[1],l[2],l[3],l[4]]
     l5 = [l[0],l[1],l[2],l[3],l[4]]
-    
     x2 = [90,180,270,360]
     x3 = [90,180,270,360]
     x4 = [90,180,270,360]
     x5 = [90,180,270,360]
     x6 = [90,180,270,360]
-
     d = [1,2,3,4,5]
     r1 = 0
     r2 = 0
     r3 = 0
     r4 = 0
     r5 = 0
-
     f1 = 0
     f2 = 0
     f3 = 0
     f4 = 0
     f5 = 0
-    
     pop11 = 0
     pop12 = 0
     pop13 = 0
-
     pop21 = 0
     pop22 = 0
     pop23 = 0
-
     pop31 = 0
     pop32 = 0
     pop33 = 0
-
     pop41 = 0
     pop42 = 0
     pop43 = 0
-
-
     pop51 = 0
     pop52 = 0
     pop53 = 0
