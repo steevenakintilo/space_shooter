@@ -9,9 +9,10 @@
 # Import the pygame module
 import pygame
 from random import randint
+from os import system
 
 def write_id(path,x):  
-    f = open(path, "a")
+    f = open(path, "w")
     f.write(str(x))    
     f.close            
 
@@ -63,9 +64,15 @@ class Boss(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect()
 
 def display_all(screen,x,y):
-    pygame.draw.circle(screen, (255, 255, 255), (x, y), 1)
+    pygame.draw.rect(screen, (255, 255, 255), (x, y), 1)
 
+def shoot_fire(screen,color,X,Y,fire_speed):
+    pos_y = Y  - fire_speed - 25
+    pygame.draw.rect(screen, color, pygame.Rect(X + 41,pos_y, 5, 20))
+    #print(pos_y)
+    
 def main_loop():
+    color = (255,255,255)
     pygame.init()
     pygame.display.set_caption('Space Shooter')
     clock = pygame.time.Clock()
@@ -76,13 +83,19 @@ def main_loop():
     background = Background("space.png")
     boss = Boss()
     running = True
+    fire_speed = 0
+    space = 0
     while running:
+        xpos = print_file("pos_y")
+        pos = float(xpos)
+        #space = 0
         for event in pygame.event.get():
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     running = False
             elif event.type == QUIT:
                 running = False
+        pos_y =  Y  - fire_speed - 25
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_UP] and Y > 530:
             Y = Y - 10
@@ -95,7 +108,23 @@ def main_loop():
         screen.fill((0, 0, 0))
         screen.blit(background.surf,(0,0))
         screen.blit(player.surf,(X,Y))
+        if space != 0:
+            fire_speed = fire_speed + 10
+            if pos_y < 0:
+                space = 0
+                fire_speed = 10
+            shoot_fire(screen,color,int(pos),Y,fire_speed)
+            #pygame.draw.rect(screen, color, pygame.Rect(X + 41, Y  - fire_speed - 25, 5, 20))
+        if space == 0:
+            write_id("pos_y",str(X))
+        if pressed_keys[K_SPACE]:
+            space = 0
+            space = space + 1
+            #shoot_fire(screen,color,X,Y,fire_speed)
+        print(space, X)
         pygame.display.flip()
         clock.tick(30)
-        print(X,Y)
+        #print(X,Y)
+
+system("clear")
 main_loop()
