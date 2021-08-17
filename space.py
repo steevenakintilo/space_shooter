@@ -17,9 +17,11 @@ sys.setrecursionlimit(1000000)
     
 def random_shoot(no,list,lens):
     val = 0
+    #print(list)
     y = randint(1,lens)
     #l = [1,2,3,4,5]
     x = int(list[y - 1])
+    print(list,x)
     #if x == no:
     #    l.pop(no - 1)
     #    newy = randint(1,4)
@@ -78,6 +80,7 @@ def check_win(list):
     if win == 5:
         return (1)  
 def level1(lvl,bullet_damage,damage):
+    eee = print_file("life.txt")
     color = (255,255,255)
     color2 = (250,0,0)
     pygame.init()
@@ -108,7 +111,7 @@ def level1(lvl,bullet_damage,damage):
     x4 = [90,180,270,360]
     x5 = [90,180,270,360]
     x6 = [90,180,270,360]
-    d = [1,2,3,4,5]
+    d = ["1","2","3","4","5"]
     r1 = 0
     r2 = 0
     r3 = 0
@@ -150,6 +153,7 @@ def level1(lvl,bullet_damage,damage):
         y5 = [l2[4],l3[4],l4[4],l5[4]]
         bullet_speed = bullet_speed + bullet_damage
         if dmg > 1290:
+            write_id("life.txt","10")
             quit()
         xpos = print_file("pos_y")
         pos = float(xpos)
@@ -176,7 +180,7 @@ def level1(lvl,bullet_damage,damage):
         last_line = [l5[0],l5[1],l5[2],l5[3],l5[4]]
         move_up = move_up + 2
         if move_up < 300:
-            dmg = dmg
+            dmg = int(eee)
         if move_up > 300:
             move_up = 300
         if space != 0:
@@ -304,22 +308,24 @@ def level1(lvl,bullet_damage,damage):
         #print(y1,y2,y3,y4,y5)
         write_id("life.txt",str(dmg))
         dz = print_file("life.txt")
-        print(dz)
+        #print(dz,eee)
         if l5[0] == -9999 and f1 == 0:
             f1 = 1
-            d.pop(0)
-        if l5[1] == -9999 and f2 == 0:
+            d.remove("1")
+        elif l5[1] == -9999 and f2 == 0:
             f2 = 1
-            d.pop(len(d) - 2)
-        if l5[2] == -9999 and f3 == 0:
+            d.remove("2")
+        elif l5[2] == -9999 and f3 == 0:
             f3 = 1
-            d.pop(len(d) - 3)
-        if l5[3] == -9999 and f4 == 0:
+            d.remove("3")
+        elif l5[3] == -9999 and f4 == 0:
             f4 = 1
-            d.pop(len(d) - 4)
-        if l5[4] == -9999 and f5 == 0 and len(d) > 1:
+            d.remove("4")
+        elif l5[4] == -9999 and f5 == 0 and len(d) > 1:
             f5 = 1
-            d.pop(len(d) - 5)
+            d.remove("5")
+        print(d)
+        #print(d)
 
 def check_level(lvl,life):
     life = print_file("life.txt")
