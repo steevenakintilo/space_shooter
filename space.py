@@ -39,7 +39,7 @@ def random_shoot(no,list,lens):
         val = 720
     return(val)
 
-def end_loop(lvl):
+def end_loop(lvl,life):
     #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
@@ -64,7 +64,7 @@ def end_loop(lvl):
                 quit()
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_SPACE]:
-            check_level(lvl)
+            check_level(lvl,life)
         screen.fill((0, 0, 0))
         screen.blit(background.surf,(0,0))
         pygame.display.flip()
@@ -77,7 +77,7 @@ def check_win(list):
             win = win + 1
     if win == 5:
         return (1)  
-def level1(lvl,bullet_damage):
+def level1(lvl,bullet_damage,damage):
     color = (255,255,255)
     color2 = (250,0,0)
     pygame.init()
@@ -95,7 +95,7 @@ def level1(lvl,bullet_damage):
     space = 0
     move_up = 0
     move_down = 0
-    damage = 10
+    #int(damage) = int(life)
     bullet_speed = 0
     enemy_x_pos = [280,360,380,460,480,560,580,660,680,760]
     l = [20,120,220,320,420]
@@ -140,14 +140,16 @@ def level1(lvl,bullet_damage):
     random_enemy = [320,420,520,620,720]
     rdm_shoot = random_shoot(0,d,5)
     random_shoot2 = 90
+    dmg = int(damage)
     while running:
+        life = write_id("life.txt",str(dmg))
         y1 = [l2[0],l3[0],l4[0],l5[0]]
         y2 = [l2[1],l3[1],l4[1],l5[1]]
         y3 = [l2[2],l3[2],l4[2],l5[2]]
         y4 = [l2[3],l3[3],l4[3],l5[3]]
         y5 = [l2[4],l3[4],l4[4],l5[4]]
         bullet_speed = bullet_speed + bullet_damage
-        if damage > 1290:
+        if dmg > 1290:
             quit()
         xpos = print_file("pos_y")
         pos = float(xpos)
@@ -174,7 +176,7 @@ def level1(lvl,bullet_damage):
         last_line = [l5[0],l5[1],l5[2],l5[3],l5[4]]
         move_up = move_up + 2
         if move_up < 300:
-            damage = 10
+            dmg = dmg
         if move_up > 300:
             move_up = 300
         if space != 0:
@@ -190,7 +192,7 @@ def level1(lvl,bullet_damage):
             space = space + 1
         if check_win(last_line) == 1:
             lvl = lvl + 1
-            end_loop(lvl)
+            end_loop(lvl,dmg)
         if move_up == 300:
             pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,bullet_speed + random_shoot2, 5, 10))
         pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,random_shoot2, 5, 10))
@@ -225,7 +227,7 @@ def level1(lvl,bullet_damage):
                 rdm_shoot = random_shoot(5,d,len(d))
                 random_shoot2 = li6
         if rdm_shoot >= int(pos) - 42 and rdm_shoot <= int(pos) + 42 and bullet_speed + random_shoot2 >= Y and bullet_speed + random_shoot2 <= Y + 67:
-            damage = damage + 30
+            dmg = dmg + 30
             bullet_speed = 0
         if move_up == 300:
             for i in range(9):
@@ -296,11 +298,13 @@ def level1(lvl,bullet_damage):
             pop53 = 1
         
         pygame.draw.rect(screen, color, pygame.Rect(0,705,1290,30))
-        pygame.draw.rect(screen, color2, pygame.Rect(0,705,1290 - damage,30))
+        pygame.draw.rect(screen, color2, pygame.Rect(0,705,1290 - dmg,30))
         pygame.display.flip()
         clock.tick(30)
         #print(y1,y2,y3,y4,y5)
-
+        write_id("life.txt",str(dmg))
+        dz = print_file("life.txt")
+        print(dz)
         if l5[0] == -9999 and f1 == 0:
             f1 = 1
             d.pop(0)
@@ -317,12 +321,13 @@ def level1(lvl,bullet_damage):
             f5 = 1
             d.pop(len(d) - 5)
 
-def check_level(lvl):
+def check_level(lvl,life):
+    life = print_file("life.txt")
     if lvl == 1:
-        level1(1,10)
+        level1(1,10,life)
     if lvl == 2:
-        level1(2,20)
+        level1(2,20,life)
     
 write_id("pos_y","100")
 system("clear")
-check_level(1)
+check_level(1,10)
