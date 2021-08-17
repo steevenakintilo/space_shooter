@@ -137,7 +137,7 @@ def the_shoop(lvl,life):
         clock.tick(30)
 
 
-def end_loop(lvl,life):
+def win_loop(lvl,life):
     #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
@@ -153,6 +153,38 @@ def end_loop(lvl,life):
     clock = pygame.time.Clock()
     running = True
     background = Background("win.png")
+    while running:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+            elif event.type == QUIT:
+                quit()
+        pressed_keys = pygame.key.get_pressed()
+        if pressed_keys[K_SPACE]:
+            check_level(lvl,life)
+        screen.fill((0, 0, 0))
+        screen.blit(background.surf,(0,0))
+        pygame.display.flip()
+        clock.tick(30)
+
+
+def end_loop(lvl,life):
+    #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
+    SCREEN_WIDTH = 1280
+    SCREEN_HEIGHT = 720
+
+    pygame.init()
+    pygame.mixer.init()
+    GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
+  
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    X = 100
+    Y = SCREEN_HEIGHT/2
+
+    clock = pygame.time.Clock()
+    running = True
+    background = Background("loose.png")
     while running:
         for event in pygame.event.get():
             if event.type == KEYDOWN:
@@ -225,16 +257,26 @@ def level1(lvl,bullet_damage,damage,enemylife):
         double_bullet = 1
         big_bullet = 3
         faster_bullet = 1
-    if lvl == 6:
+    more_damage = 0
+    if lvl == 10:
         speed_follow = 3
-    if lvl != 4 or lvl != 5 or lvl != 6:
+    if lvl == 1 or lvl == 2:
         enemy = Ship("eship.png")
+        more_damage = 0
+    if lvl == 3:
+        enemy = Ship("eship2.png")
+        more_damage = 10
+    if lvl == 5 or lvl == 6:
+        enemy = Ship("eship3.png")
+        more_damage = 30
+    if lvl == 8 or lvl == 9:
+        enemy = Ship("eship4.png")
+        more_damage = 50
     if lvl == 4:
         enemy = Ship("boss1.png")
-    background = Background("space.png")
-    if lvl == 5:
+    if lvl == 7:
         enemy = Ship("boss2.png")
-    if lvl == 6:
+    if lvl == 10:
         enemy = Ship("boss3.png")
     background = Background("space.png")
     boss = Boss()
@@ -291,7 +333,7 @@ def level1(lvl,bullet_damage,damage,enemylife):
     rdm_shoot = random_shoot(0,d,5)
     random_shoot2 = 90
     dmg = int(damage)
-    if lvl != 4 and lvl != 5 and lvl != 6:
+    if lvl != 4 and lvl != 7 and lvl != 10:
         while running:
             life = write_id("life.txt",str(dmg))
             y1 = [l2[0],l3[0],l4[0],l5[0]]
@@ -302,7 +344,7 @@ def level1(lvl,bullet_damage,damage,enemylife):
             bullet_speed = bullet_speed + bullet_damage
             if dmg > 1290:
                 write_id("life.txt","10")
-                quit()
+                end_loop(lvl,life)
             xpos = print_file("pos_y")
             pos = float(xpos)
             for event in pygame.event.get():
@@ -360,7 +402,7 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 the_shoop(lvl,dmg)
             if move_up == 300:
                 pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,bullet_speed + random_shoot2, 5, 10))
-            pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,random_shoot2, 5, 10))
+            #pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,random_shoot2, 5, 10))
             li2 = x2[randint(0,len(x2) - 1)]
             li3 = x3[randint(0,len(x3) - 1)]
             li4 = x4[randint(0,len(x4) - 1)]
@@ -393,7 +435,7 @@ def level1(lvl,bullet_damage,damage,enemylife):
                     rdm_shoot = random_shoot(5,d,len(d))
                     random_shoot2 = li6
             if rdm_shoot >= int(pos) - 42 and rdm_shoot <= int(pos) + 42 and bullet_speed + random_shoot2 >= Y and bullet_speed + random_shoot2 <= Y + 67:
-                dmg = dmg + 30
+                dmg = dmg + 30 + more_damage
                 bullet_speed = 0
             if pressed_keys[K_SPACE] and enemy_life < 1 and double_bullet == 0:
                 enemy_life = enemy_lifes
@@ -538,15 +580,16 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 d.remove("5")
             #print(money)
             #print(d)
-    if lvl == 4 or lvl == 5 or lvl == 6:
+    if lvl == 4 or lvl == 7 or lvl == 10:
         while running:
             if move_up == 300:
-                if boss_follow + 550 < X and X < 1175:
-                    boss_follow = boss_follow + 2 + speed_follow
-                if boss_follow + 550 > X and X > 100:
-                    boss_follow = boss_follow - 2 - speed_follow
-                if boss_follow == X:
-                    boss_follow = boss_follow
+                if lvl == 7 or lvl == 10:
+                    if boss_follow + 550 < X and X < 1175:
+                        boss_follow = boss_follow + 2 + speed_follow
+                    if boss_follow + 550 > X and X > 100:
+                        boss_follow = boss_follow - 2 - speed_follow
+                    if boss_follow == X:
+                        boss_follow = boss_follow
             life = write_id("life.txt",str(dmg))
             bullet_speed = bullet_speed + bullet_damage
             if dmg > 1290:
@@ -577,9 +620,9 @@ def level1(lvl,bullet_damage,damage,enemylife):
             screen.blit(player.surf,(X,Y))
             if lvl == 4:
                 screen.blit(enemy.surf,(0 + move_up * 1.5,0))
-            if (lvl == 5  or lvl == 6) and move_up < 300:
+            if (lvl == 7  or lvl == 10) and move_up < 300:
                 screen.blit(enemy.surf,(0 + move_up * 1.5 ,0))
-            if (lvl == 5 or lvl == 6) and move_up == 300:
+            if (lvl == 7 or lvl == 10) and move_up == 300:
                 screen.blit(enemy.surf,(0 + move_up * 1.5 + boss_follow,0))
             
             #display_enemy(screen,enemy,l,l2,l3,l4,l5,move_down,move_up)
@@ -617,14 +660,14 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 the_shoop(lvl,dmg)
             if move_up == 300:
                 pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,bullet_speed + random_shoot2, 5, 10))
-            pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,random_shoot2, 5, 10))
+            #pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,random_shoot2, 5, 10))
             GAME_FONT.render_to(screen, (5, 5), "Level " + str(lvl), (255,255,255))
             if bullet_speed > 610:
                 bullet_speed = 0
                 if enemy_life > 0:
-                    if lvl == 4 or lvl == 5:
+                    if lvl == 4 or lvl == 7:
                         rdm_shoot = randint(boss_follow + 450,boss_follow + 600)
-                    if lvl == 6:
+                    if lvl == 10:
                         rdm_shoot = randint(boss_follow + 500,boss_follow + 550)
                         dmg = dmg + 1
                     
@@ -665,25 +708,33 @@ def check_level(lvl,life):
     life = print_file("life.txt")
     enemy_life = print_file("enemy_life.txt")
     if lvl == 1:
-        level1(1,10,life,enemy_life)
+        level1(1,10,life,1)
     if lvl == 2:
-        level1(2,11,life,enemy_life)
+        level1(2,11,life,1)
     if lvl == 3:
-        level1(3,12,life,enemy_life)
+        level1(3,12,life,2)
     if lvl == 4:
-        level1(4,15,life,enemy_life)
+        level1(4,15,life,50)
     if lvl == 5:
-        level1(5,20,life,enemy_life)
+        level1(5,13,life,5)
     if lvl == 6:
-        level1(6,40,life,enemy_life)
+        level1(6,14,life,5)
+    if lvl == 7:
+        level1(7,20,life,100)
+    if lvl == 8:
+        level1(8,15,life,10)
+    if lvl == 9:
+        level1(9,16,life,10)
+    if lvl == 10:
+        level1(10,40,life,200)
     
-write_id("enemy_life.txt","200")
-write_id("ship.txt","5")
+write_id("enemy_life.txt","1")
+write_id("ship.txt","1")
 write_id("life.txt","10")
 write_id("money.txt","0")
 write_id("pos_y","100")
 system("clear")
-check_level(6,10)
+check_level(1,10)
 life = print_file("life.txt")
 print(life)
 the_shoop(1,life)
