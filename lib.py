@@ -7,6 +7,7 @@
 ##
 
 import pygame
+import pygame.freetype 
 from random import randint
 from os import system
 
@@ -31,6 +32,11 @@ from pygame.locals import (
     K_ESCAPE,
     KEYDOWN,
     QUIT,
+    K_1,
+    K_2,
+    K_3,
+    K_4,
+    K_5,
 )
 
 SCREEN_WIDTH = 1280
