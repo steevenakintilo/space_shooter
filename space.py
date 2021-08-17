@@ -225,13 +225,17 @@ def level1(lvl,bullet_damage,damage,enemylife):
         double_bullet = 1
         big_bullet = 3
         faster_bullet = 1
-    if lvl != 4 or lvl != 5:
+    if lvl == 6:
+        speed_follow = 3
+    if lvl != 4 or lvl != 5 or lvl != 6:
         enemy = Ship("eship.png")
     if lvl == 4:
         enemy = Ship("boss1.png")
     background = Background("space.png")
     if lvl == 5:
         enemy = Ship("boss2.png")
+    if lvl == 6:
+        enemy = Ship("boss3.png")
     background = Background("space.png")
     boss = Boss()
     running = True
@@ -534,13 +538,13 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 d.remove("5")
             #print(money)
             #print(d)
-    if lvl == 4 or lvl == 5:
+    if lvl == 4 or lvl == 5 or lvl == 6:
         while running:
             if move_up == 300:
                 if boss_follow + 550 < X and X < 1175:
-                    boss_follow = boss_follow + 2
+                    boss_follow = boss_follow + 2 + speed_follow
                 if boss_follow + 550 > X and X > 100:
-                    boss_follow = boss_follow - 2
+                    boss_follow = boss_follow - 2 - speed_follow
                 if boss_follow == X:
                     boss_follow = boss_follow
             life = write_id("life.txt",str(dmg))
@@ -573,9 +577,9 @@ def level1(lvl,bullet_damage,damage,enemylife):
             screen.blit(player.surf,(X,Y))
             if lvl == 4:
                 screen.blit(enemy.surf,(0 + move_up * 1.5,0))
-            if lvl == 5 and move_up < 300:
+            if (lvl == 5  or lvl == 6) and move_up < 300:
                 screen.blit(enemy.surf,(0 + move_up * 1.5 ,0))
-            if lvl == 5 and move_up == 300:
+            if (lvl == 5 or lvl == 6) and move_up == 300:
                 screen.blit(enemy.surf,(0 + move_up * 1.5 + boss_follow,0))
             
             #display_enemy(screen,enemy,l,l2,l3,l4,l5,move_down,move_up)
@@ -618,10 +622,15 @@ def level1(lvl,bullet_damage,damage,enemylife):
             if bullet_speed > 610:
                 bullet_speed = 0
                 if enemy_life > 0:
-                    rdm_shoot = randint(boss_follow + 450,boss_follow + 600)
+                    if lvl == 4 or lvl == 5:
+                        rdm_shoot = randint(boss_follow + 450,boss_follow + 600)
+                    if lvl == 6:
+                        rdm_shoot = randint(boss_follow + 500,boss_follow + 550)
+                        dmg = dmg + 1
+                    
             #        random_shoot2 = li2
             if rdm_shoot >= int(pos) - 42 and rdm_shoot <= int(pos) + 42 and bullet_speed + random_shoot2 >= Y and bullet_speed + random_shoot2 <= Y + 67:
-                dmg = dmg + 50
+                dmg = dmg + 100
                 bullet_speed = 0
             if pressed_keys[K_SPACE] and enemy_life < 1 and double_bullet == 0:
                 enemy_life = enemy_lifes
@@ -665,14 +674,16 @@ def check_level(lvl,life):
         level1(4,15,life,enemy_life)
     if lvl == 5:
         level1(5,20,life,enemy_life)
+    if lvl == 6:
+        level1(6,40,life,enemy_life)
     
-write_id("enemy_life.txt","100")
+write_id("enemy_life.txt","200")
 write_id("ship.txt","5")
 write_id("life.txt","10")
 write_id("money.txt","0")
 write_id("pos_y","100")
 system("clear")
-check_level(5,10)
+check_level(6,10)
 life = print_file("life.txt")
 print(life)
 the_shoop(1,life)
