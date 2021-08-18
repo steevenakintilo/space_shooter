@@ -564,13 +564,13 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 lvl = lvl + 1
                 if diff == 1:
                     money = randint(80,100)
-                    if money == 87:
+                    if money == 87 or money == 86 or money == 85 or money == 84 or money == 83:
                         money = 1
                     if money == 88:
                         money = 500
                 if diff == 2:
                     money = randint(50,70)
-                    if money == 57:
+                    if money == 57 or money == 56 or money == 55 or money == 54 or money == 53:
                         money = 1
                     if money == 58:
                         money = 500
