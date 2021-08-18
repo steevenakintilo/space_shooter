@@ -252,7 +252,7 @@ def menu_loop():
                     if int(print_file("level.txt")) != 11:
                         check_level(int(print_file("level.txt")),int(print_file("life.txt")))
                     if int(print_file("level.txt")) == 11:
-                        check_level(1,10) 
+                        level_loop()
                 print(pos[0],pos[1])
             elif event.type == QUIT:
                 quit()
@@ -418,11 +418,12 @@ def level1(lvl,bullet_damage,damage,enemylife):
         enemy = Ship("boss2.png")
     if lvl == 10:
         enemy = Ship("boss3.png")
+    diff_damage = 0
     if diff == 1:
-        more_damage = more_damage - int(more_damage/2)
+        diff_damage = 15
         big_bullet = big_bullet + 2
     if diff == 3:
-        more_damage = more_damage + int(more_damage/2)
+        diff_damage = 15
     background = Background("space.png")
     boss = Boss()
     running = True
@@ -629,7 +630,12 @@ def level1(lvl,bullet_damage,damage,enemylife):
             player_rect = pygame.Rect(X, Y, 84, 67)
             bullet_rect = pygame.Rect(rdm_shoot, random_shoot2, 5, 20)
             if rdm_shoot >= X - 42 and rdm_shoot <= X + 42 and bullet_speed + random_shoot2 >= Y and bullet_speed + random_shoot2 <= Y + 67:
-                dmg = dmg + 30 + more_damage
+                if diff == 1:
+                    dmg = dmg + 30 + more_damage - diff_damage
+                if diff == 2:
+                    dmg = dmg + 30 + more_damage
+                if diff == 3:
+                    dmg = dmg + 30 + more_damage + diff_damage
                 bullet_speed = 0
             if pressed_keys[K_SPACE] and enemy_life < 1 and double_bullet == 0:
                 enemy_life = enemy_lifes
