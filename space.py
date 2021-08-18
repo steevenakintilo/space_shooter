@@ -55,7 +55,7 @@ def the_shoop(lvl,life):
     shop_wait = 0
     pygame.init()
     pygame.mixer.init()
-    GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
+    GAME_FONT = pygame.freetype.Font("font/arcade.ttf", 44)
   
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     X = 100
@@ -67,7 +67,7 @@ def the_shoop(lvl,life):
     dollar = int(money)
     clock = pygame.time.Clock()
     running = True
-    background = Background("shop.jpg")
+    background = Background("pic/shop.jpg")
     lif = int(life)
     check = 0
     i = 0
@@ -139,14 +139,14 @@ def stat_loop():
     write_id("win.txt","1")
     pygame.init()
     pygame.mixer.init()
-    GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
+    GAME_FONT = pygame.freetype.Font("font/arcade.ttf", 44)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     X = 100
     Y = SCREEN_HEIGHT/2
 
     clock = pygame.time.Clock()
     running = True
-    background = Background("stat.png")
+    background = Background("pic/stat.png")
     while running:
         for event in pygame.event.get():
             if event.type == KEYDOWN:
@@ -177,14 +177,14 @@ def how_to_play_loop():
     write_id("win.txt","1")
     pygame.init()
     pygame.mixer.init()
-    GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
+    GAME_FONT = pygame.freetype.Font("font/arcade.ttf", 44)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     X = 100
     Y = SCREEN_HEIGHT/2
 
     clock = pygame.time.Clock()
     running = True
-    background = Background("howtoplay.png")
+    background = Background("pic/howtoplay.png")
     while running:
         for event in pygame.event.get():
             if event.type == KEYDOWN:
@@ -210,14 +210,14 @@ def level_loop():
     write_id("win.txt","1")
     pygame.init()
     pygame.mixer.init()
-    GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
+    GAME_FONT = pygame.freetype.Font("font/arcade.ttf", 44)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     X = 100
     Y = SCREEN_HEIGHT/2
 
     clock = pygame.time.Clock()
     running = True
-    background = Background("level.png")
+    background = Background("pic/level.png")
     while running:
         for event in pygame.event.get():
             if event.type == KEYDOWN:
@@ -247,7 +247,7 @@ def win_loop(lvl,life):
     write_id("win.txt","1")
     pygame.init()
     pygame.mixer.init()
-    GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
+    GAME_FONT = pygame.freetype.Font("font/arcade.ttf", 44)
     write_id("enemy_life.txt","1")
     write_id("ship.txt","1")
     write_id("life.txt","10")
@@ -261,7 +261,7 @@ def win_loop(lvl,life):
 
     clock = pygame.time.Clock()
     running = True
-    background = Background("win.png")
+    background = Background("pic/win.png")
     while running:
         for event in pygame.event.get():
             if event.type == KEYDOWN:
@@ -287,11 +287,11 @@ def menu_loop():
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
     pygame.init()
-    pygame.mixer.music.load("main.ogg")
+    pygame.mixer.music.load("music/main.ogg")
     pygame.mixer.music.play(-1)
     #pygame.mixer.Channel(1).play(pygame.mixer.Sound('main.ogg'))
     pygame.mixer.init()
-    GAME_FONT = pygame.freetype.Font("arcade.ttf", 64)
+    GAME_FONT = pygame.freetype.Font("font/arcade.ttf", 64)
     color = (0,0,0)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     X = 100
@@ -299,7 +299,7 @@ def menu_loop():
     stop = 0
     clock = pygame.time.Clock()
     running = True
-    background = Background("menu.png")
+    background = Background("pic/menu.png")
     m_play = 0
     while running:
         for event in pygame.event.get():
@@ -316,7 +316,6 @@ def menu_loop():
                     write_id("pos_y","100")
                     write_id("score.txt","0")
                     level_loop()
-                print(pos[0],pos[1])
                 if int(pos[0]) > 462 and int(pos[0]) < 595 and int(pos[1]) > 342 and int(pos[1]) < 385:
                     if int(print_file("level.txt")) != 11:
                         check_level(int(print_file("level.txt")),int(print_file("life.txt")))
@@ -361,7 +360,7 @@ def end_loop(lvl,life):
 
     pygame.init()
     pygame.mixer.init()
-    GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
+    GAME_FONT = pygame.freetype.Font("font/arcade.ttf", 44)
     write_id("enemy_life.txt","1")
     write_id("ship.txt","1")
     write_id("life.txt","10")
@@ -375,7 +374,7 @@ def end_loop(lvl,life):
 
     clock = pygame.time.Clock()
     running = True
-    background = Background("loose.png")
+    background = Background("pic/loose.png")
     while running:
         for event in pygame.event.get():
             if event.type == KEYDOWN:
@@ -422,7 +421,7 @@ def check_win(list):
             win = win + 1
     if win == 5:
         return (1)  
-def level1(lvl,bullet_damage,damage,enemylife):
+def game_level(lvl,bullet_damage,damage,enemylife):
     death_k = print_file("loose_nbr.txt")
     death_nbr = int(death_k)
     win_k = print_file("win_nbr.txt")
@@ -448,44 +447,44 @@ def level1(lvl,bullet_damage,damage,enemylife):
     color2 = (250,0,0)
     pygame.init()
     pygame.display.set_caption('Space Shooter')
-    GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
+    GAME_FONT = pygame.freetype.Font("font/arcade.ttf", 44)
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     X = SCREEN_WIDTH/2
     Y = 630
     add_score = 0
-    player = Ship("ship.png")
+    player = Ship("pic/ship.png")
     ship_lvl = print_file("ship.txt")
     speed_movement = 0
     double_bullet = 0
     menu_wait = 0
     big_bullet = 0
     if ship_lvl == "1":
-        player = Ship("ship.png")
+        player = Ship("pic/ship.png")
         speed_movement = 5
         double_bullet = 0
         big_bullet = 0
         faster_bullet = 0
     if ship_lvl == "2":
-        player = Ship("ship2.png")
+        player = Ship("pic/ship2.png")
         speed_movement = 10
         double_bullet = 0
         big_bullet = 0
         faster_bullet = 0
     if ship_lvl == "3":
-        player = Ship("ship3.png")
+        player = Ship("pic/ship3.png")
         speed_movement = 10
         double_bullet = 1
         big_bullet = 0
         faster_bullet = 0
     if ship_lvl == "4":
-        player = Ship("ship4.png")
+        player = Ship("pic/ship4.png")
         speed_movement = 10
         double_bullet = 1
         big_bullet = 3
         faster_bullet = 0
     if ship_lvl == "5":
-        player = Ship("ship5.png")
+        player = Ship("pic/ship5.png")
         speed_movement = 10
         double_bullet = 1
         big_bullet = 3
@@ -496,23 +495,23 @@ def level1(lvl,bullet_damage,damage,enemylife):
     if lvl == 4 or lvl == 7:
         speed_follow = 0
     if lvl == 1 or lvl == 2:
-        enemy = Ship("eship.png")
+        enemy = Ship("pic/eship.png")
         more_damage = 0
     if lvl == 3:
-        enemy = Ship("eship2.png")
+        enemy = Ship("pic/eship2.png")
         more_damage = 10
     if lvl == 5 or lvl == 6:
-        enemy = Ship("eship3.png")
+        enemy = Ship("pic/eship3.png")
         more_damage = 30
     if lvl == 8 or lvl == 9:
-        enemy = Ship("eship4.png")
+        enemy = Ship("pic/eship4.png")
         more_damage = 50
     if lvl == 4:
-        enemy = Ship("boss1.png")
+        enemy = Ship("pic/boss1.png")
     if lvl == 7:
-        enemy = Ship("boss2.png")
+        enemy = Ship("pic/boss2.png")
     if lvl == 10:
-        enemy = Ship("boss3.png")
+        enemy = Ship("pic/boss3.png")
     diff_damage = 0
     easy_bull = 0
     if diff == 1:
@@ -520,7 +519,7 @@ def level1(lvl,bullet_damage,damage,enemylife):
         easy_bull = 2
     if diff == 3:
         diff_damage = 15
-    background = Background("space.png")
+    background = Background("pic/space.png")
     boss = Boss()
     running = True
     fire_speed = 0
@@ -736,7 +735,7 @@ def level1(lvl,bullet_damage,damage,enemylife):
                     random_shoot2 = li6
             player_rect = pygame.Rect(X, Y, 84, 67)
             bullet_rect = pygame.Rect(rdm_shoot, random_shoot2, 5, 20)
-            print(shoot_gots)
+            #print(shoot_gots)
             if rdm_shoot >= X - 42 and rdm_shoot <= X + 42 and bullet_speed + random_shoot2 >= Y and bullet_speed + random_shoot2 <= Y + 67:
                 if diff == 1:
                     dmg = dmg + 30 + more_damage - diff_damage
@@ -1110,29 +1109,29 @@ def check_level(lvl,life):
     life = print_file("life.txt")
     enemy_life = print_file("enemy_life.txt")
     if lvl == 1:
-        level1(1,10,life,1)
+        game_level(1,10,life,1)
     if lvl == 2:
-        level1(2,11,life,1)
+        game_level(2,11,life,1)
     if lvl == 3:
-        level1(3,12,life,2)
+        game_level(3,12,life,2)
     if lvl == 4:
-        level1(4,15,life,50)
+        game_level(4,15,life,50)
     if lvl == 5:
-        level1(5,13,life,5)
+        game_level(5,13,life,5)
     if lvl == 6:
-        level1(6,14,life,5)
+        game_level(6,14,life,5)
     if lvl == 7:
-        level1(7,20,life,100)
+        game_level(7,20,life,100)
     if lvl == 8:
-        level1(8,15,life,10)
+        game_level(8,15,life,10)
     if lvl == 9:
-        level1(9,16,life,10)
+        game_level(9,16,life,10)
     if lvl == 10:
-        level1(10,40,life,200)
+        game_level(10,40,life,200)
     
 system("clear")
 #check_level(1,10)
 life = print_file("life.txt")
-print(life)
+#print(life)
 #the_shoop(1,life)
 menu_loop()
