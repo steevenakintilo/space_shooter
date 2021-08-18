@@ -141,11 +141,16 @@ def win_loop(lvl,life):
     #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
-
+    write_id("win.txt","1")
     pygame.init()
     pygame.mixer.init()
     GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
-  
+    write_id("enemy_life.txt","1")
+    write_id("ship.txt","1")
+    write_id("life.txt","10")
+    write_id("money.txt","0")
+    write_id("pos_y","100")
+    write_id("level.txt","1")
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     X = 100
     Y = SCREEN_HEIGHT/2
@@ -161,10 +166,13 @@ def win_loop(lvl,life):
             elif event.type == QUIT:
                 quit()
         pressed_keys = pygame.key.get_pressed()
-        if pressed_keys[K_SPACE]:
-            check_level(lvl,life)
+        if pressed_keys[ord('x')]:
+            quit()
+        if pressed_keys[ord("m")]:
+            menu_loop()
         screen.fill((0, 0, 0))
         screen.blit(background.surf,(0,0))
+        GAME_FONT.render_to(screen, (230, 650), "Press    M    TO    GO    TO    THE    MENU    AND    X    TO    QUIT", (255,255,255))
         pygame.display.flip()
         clock.tick(30)
 
@@ -201,7 +209,16 @@ def menu_loop():
                     write_id("pos_y","100")
                     check_level(1,10)
                 if int(pos[0]) > 462 and int(pos[0]) < 595 and int(pos[1]) > 342 and int(pos[1]) < 385:
-                    check_level(int(print_file("level.txt")),int(print_file("life.txt")))
+                    if int(print_file("level.txt")) != 11:
+                        check_level(int(print_file("level.txt")),int(print_file("life.txt")))
+                    if int(print_file("level.txt")) == 11:
+                        check_level(int(print_file("level.txt")),int(print_file("life.txt")))
+                        write_id("enemy_life.txt","1")
+                        write_id("ship.txt","5")
+                        write_id("life.txt","10")
+                        write_id("money.txt","0")
+                        write_id("pos_y","100")
+                        check_level(1,10) 
                 print(pos[0],pos[1])
             elif event.type == QUIT:
                 quit()
@@ -245,8 +262,8 @@ def end_loop(lvl,life):
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[ord('x')]:
             quit()
-        if pressed_keys[K_SPACE]:
-            check_level(lvl,life)
+        if pressed_keys[ord('m')]:
+            menu_loop()
         screen.fill((0, 0, 0))
         screen.blit(background.surf,(0,0))
         GAME_FONT.render_to(screen, (230, 550), "Press    M    TO    GO    TO    THE    MENU    AND    X    TO    QUIT", (255,255,255))
@@ -314,6 +331,8 @@ def level1(lvl,bullet_damage,damage,enemylife):
     more_damage = 0
     if lvl == 10:
         speed_follow = 3
+    if lvl == 4 or lvl == 7:
+        speed_follow = 0
     if lvl == 1 or lvl == 2:
         enemy = Ship("eship.png")
         more_damage = 0
@@ -453,7 +472,10 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 if money == 48:
                     money = 500
                 write_id("money.txt",str(int(money) + int(m)))
-                the_shoop(lvl,dmg)
+                if lvl != 11:
+                    the_shoop(lvl,dmg)
+                if lvl == 11:
+                    win_loop(lvl,life)
             if move_up == 300:
                 pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,bullet_speed + random_shoot2, 5, 10))
             #pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,random_shoot2, 5, 10))
@@ -711,7 +733,10 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 if money == 98:
                     money = 5000
                 write_id("money.txt",str(int(money) + int(m)))
-                the_shoop(lvl,dmg)
+                if lvl != 11:
+                    the_shoop(lvl,dmg)
+                if lvl == 11:
+                    win_loop(lvl,life)
             if move_up == 300:
                 pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,bullet_speed + random_shoot2, 5, 10))
             #pygame.draw.rect(screen, color, pygame.Rect(rdm_shoot + 41,random_shoot2, 5, 10))
@@ -745,7 +770,7 @@ def level1(lvl,bullet_damage,damage,enemylife):
                             enemy_life = enemy_life - big_bullet - 2
                             space = 0
                             fire_speed = 10
-            print(boss_follow + 450,X,enemy_life)           
+            #print(boss_follow + 450,X,enemy_life)           
             pygame.draw.rect(screen, color, pygame.Rect(0,705,1290,30))
             pygame.draw.rect(screen, color2, pygame.Rect(0,705,1290 - dmg,30))
             pygame.display.flip()
