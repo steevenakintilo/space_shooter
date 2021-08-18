@@ -18,18 +18,8 @@ sys.setrecursionlimit(1000000)
     
 def random_shoot(no,list,lens):
     val = 0
-    #print(list)
     y = randint(1,lens)
-    #l = [1,2,3,4,5]
     x = int(list[y - 1])
-    #print(list,x)
-    #if x == no:
-    #    l.pop(no - 1)
-    #    newy = randint(1,4)
-    #    x = int(l[newy - 1])
-    #print(list,no,lens)        
-    #if no == 0:
-    #    x = randint(1,5)
     if x == 1:
         val = 320
     if x == 2:
@@ -44,18 +34,8 @@ def random_shoot(no,list,lens):
 
 def srandom_shoot(no,list,lens):
     val = 0
-    #print(list)
     y = randint(1,lens)
-    #l = [1,2,3,4,5]
     x = int(list[y - 1])
-    #print(list,x)
-    #if x == no:
-    #    l.pop(no - 1)
-    #    newy = randint(1,4)
-    #    x = int(l[newy - 1])
-    #print(list,no,lens)        
-    #if no == 0:
-    #    x = randint(1,5)
     if x == 1:
         val = 320
     if x == 2:
@@ -72,7 +52,7 @@ def the_shoop(lvl,life):
     #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
-
+    shop_wait = 0
     pygame.init()
     pygame.mixer.init()
     GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
@@ -92,6 +72,7 @@ def the_shoop(lvl,life):
     check = 0
     i = 0
     while running:
+        shop_wait = shop_wait + 1
         for event in pygame.event.get():
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
@@ -102,7 +83,7 @@ def the_shoop(lvl,life):
         if i % 100 == 0:
             check = 0
         i = i + 1
-        if pressed_keys[K_SPACE]:
+        if pressed_keys[K_SPACE] and shop_wait > 200:
             check_level(lvl,life)
         if pressed_keys[K_1] and dollar >= 25 and check == 0 and lif > 10:
             check = 1
@@ -137,6 +118,55 @@ def the_shoop(lvl,life):
         clock.tick(30)
 
 
+
+
+def stat_loop():
+    #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
+    death_k = print_file("loose_nbr.txt")
+    win_k = print_file("win_nbr.txt")
+    ship_k = print_file("ship_kill.txt")
+    boss_k = print_file("boss_kill.txt")
+    shoot_k = print_file("shoot_recieve.txt")
+    death = int(death_k)
+    win = int(win_k)
+    ship = int(ship_k)
+    boss = int(boss_k)
+    shoot = int(shoot_k)
+    SCREEN_WIDTH = 1280
+    SCREEN_HEIGHT = 720
+    write_id("win.txt","1")
+    pygame.init()
+    pygame.mixer.init()
+    GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    X = 100
+    Y = SCREEN_HEIGHT/2
+
+    clock = pygame.time.Clock()
+    running = True
+    background = Background("stat.png")
+    while running:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    quit()
+            elif event.type == QUIT:
+                quit()
+        pressed_keys = pygame.key.get_pressed()
+        if pressed_keys[ord('m')]:
+            menu_loop()
+        if pressed_keys[ord("x")]:
+            quit() 
+        screen.fill((0, 0, 0))
+        screen.blit(background.surf,(0,0))
+        GAME_FONT.render_to(screen, (230, 670), "Press    M    TO    GO    TO    THE    MENU    AND    X    TO    QUIT", (255,255,255))
+        GAME_FONT.render_to(screen, (860 + + len(str(win)), 182), str(win), (255,255,255))
+        GAME_FONT.render_to(screen, (880 + + len(str(death)), 254), str(death), (255,255,255))
+        GAME_FONT.render_to(screen, (940 + len(str(ship)), 326), str(ship), (255,255,255))
+        GAME_FONT.render_to(screen, (940 + len(str(boss)), 424), str(boss), (255,255,255))
+        GAME_FONT.render_to(screen, (945 + len(str(shoot)), 516), str(shoot), (255,255,255))
+        pygame.display.flip()
+        clock.tick(30)
 
 def how_to_play_loop():
     #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
@@ -196,7 +226,7 @@ def level_loop():
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[ord('e')]:
             write_id("difficulty.txt","1")
-            check_level(1,10) 
+            check_level(4,10) 
         if pressed_keys[ord("m")]:
             write_id("difficulty.txt","2")
             check_level(1,10) 
@@ -275,7 +305,7 @@ def menu_loop():
                 pos = pygame.mouse.get_pos()
                 if int(pos[0]) > 470 and int(pos[0]) < 720 and int(pos[1]) > 248 and int(pos[1]) < 280:
                     write_id("enemy_life.txt","1")
-                    write_id("ship.txt","1")
+                    write_id("ship.txt","5")
                     write_id("life.txt","10")
                     write_id("money.txt","0")
                     write_id("pos_y","100")
@@ -288,7 +318,8 @@ def menu_loop():
                         level_loop()
                 if int(pos[0]) > 425 and int(pos[0]) < 800 and int(pos[1]) > 548 and int(pos[1]) < 578:
                     how_to_play_loop()
-                print(pos[0],pos[1])
+                if int(pos[0]) > 450 and int(pos[0]) < 760 and int(pos[1]) > 448 and int(pos[1]) < 480:
+                    stat_loop()
             elif event.type == QUIT:
                 quit()
         pressed_keys = pygame.key.get_pressed()
@@ -374,6 +405,16 @@ def check_win(list):
     if win == 5:
         return (1)  
 def level1(lvl,bullet_damage,damage,enemylife):
+    death_k = print_file("loose_nbr.txt")
+    death_nbr = int(death_k)
+    win_k = print_file("win_nbr.txt")
+    win_nbr = int(win_k)
+    ship_k = print_file("ship_kill.txt")
+    boss_k = print_file("boss_kill.txt")
+    shoot_k = print_file("shoot_recieve.txt")
+    ship_kills = int(shoot_k)
+    boss_kills = int(boss_k)
+    shoot_gots = int(shoot_k)
     dif = print_file("difficulty.txt")
     diff = int(dif)
     enemy_life = int(enemylife)
@@ -399,6 +440,7 @@ def level1(lvl,bullet_damage,damage,enemylife):
     ship_lvl = print_file("ship.txt")
     speed_movement = 0
     double_bullet = 0
+    menu_wait = 0
     big_bullet = 0
     if ship_lvl == "1":
         player = Ship("ship.png")
@@ -454,9 +496,10 @@ def level1(lvl,bullet_damage,damage,enemylife):
     if lvl == 10:
         enemy = Ship("boss3.png")
     diff_damage = 0
+    easy_bull = 0
     if diff == 1:
         diff_damage = 15
-        big_bullet = big_bullet + 2
+        easy_bull = 2
     if diff == 3:
         diff_damage = 15
     background = Background("space.png")
@@ -520,6 +563,7 @@ def level1(lvl,bullet_damage,damage,enemylife):
     up_score = 0
     if lvl != 4 and lvl != 7 and lvl != 10:
         while running:
+            menu_wait = menu_wait + 1
             if move_up == 300:
                 up_score = up_score + 1
             if up_score % 30 == 1:
@@ -532,6 +576,8 @@ def level1(lvl,bullet_damage,damage,enemylife):
             y5 = [l2[4],l3[4],l4[4],l5[4]]
             bullet_speed = bullet_speed + bullet_damage
             if dmg > 1290:
+                death_nbr = death_nbr + 1
+                write_id("loose_nbr.txt",death_nbr)
                 write_id("life.txt","10")
                 end_loop(lvl,life)
             xpos = print_file("pos_y")
@@ -557,8 +603,9 @@ def level1(lvl,bullet_damage,damage,enemylife):
             if pressed_keys[ord('s')]:
                 write_id("life.txt",str(level_life))
                 quit()
-            if pressed_keys[ord("m")]:
-                menu_loop()
+            if menu_wait > 200:
+                if pressed_keys[ord("m")]:
+                    menu_loop()
             screen.fill((0, 0, 0))
             screen.blit(background.surf,(0,0))
             screen.blit(player.surf,(X,Y))
@@ -607,13 +654,13 @@ def level1(lvl,bullet_damage,damage,enemylife):
                     if money == 87 or money == 86 or money == 85 or money == 84 or money == 83:
                         money = 1
                     if money == 88:
-                        money = 500
+                        money = 1000
                 if diff == 2:
                     money = randint(50,70)
                     if money == 57 or money == 56 or money == 55 or money == 54 or money == 53:
                         money = 1
                     if money == 58:
-                        money = 500
+                        money = 750
                 if diff == 3:
                     money = randint(30,50)
                     if money == 47:
@@ -625,6 +672,8 @@ def level1(lvl,bullet_damage,damage,enemylife):
                     write_id("score.txt",str(score))
                     the_shoop(lvl,dmg)
                 if lvl == 11:
+                    win_nbr = win_nbr + 1
+                    write_id("win_nbr.txt",win_nbr)
                     write_id("score.txt",str(score))
                     win_loop(lvl,life)
             if score > int(highscore):
@@ -669,13 +718,20 @@ def level1(lvl,bullet_damage,damage,enemylife):
                     random_shoot2 = li6
             player_rect = pygame.Rect(X, Y, 84, 67)
             bullet_rect = pygame.Rect(rdm_shoot, random_shoot2, 5, 20)
+            print(shoot_gots)
             if rdm_shoot >= X - 42 and rdm_shoot <= X + 42 and bullet_speed + random_shoot2 >= Y and bullet_speed + random_shoot2 <= Y + 67:
                 if diff == 1:
                     dmg = dmg + 30 + more_damage - diff_damage
+                    shoot_gots = shoot_gots + 1
+                    write_id("shoot_recieve.txt",shoot_gots)
                 if diff == 2:
                     dmg = dmg + 30 + more_damage
+                    shoot_gots = shoot_gots + 1
+                    write_id("shoot_recieve.txt",shoot_gots)
                 if diff == 3:
                     dmg = dmg + 30 + more_damage + diff_damage
+                    shoot_gots = shoot_gots + 1
+                    write_id("shoot_recieve.txt",shoot_gots)
                 bullet_speed = 0
             if pressed_keys[K_SPACE] and enemy_life < 1 and double_bullet == 0:
                 enemy_life = enemy_lifes
@@ -684,74 +740,90 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 for i in range(9):
                     if double_bullet == 0:
                         if pos_y < 385 and int(pos) >= enemy_x_pos[i] and int(pos) <= enemy_x_pos[i + 1] and l2[int(i/2)] != -9999:
-                            enemy_life = enemy_life - big_bullet - 1
+                            enemy_life = enemy_life - big_bullet - 1- easy_bull
                             space = 0
                             fire_speed = 10
-                            if enemy_life == 0:
+                            if enemy_life <= 0:
                                 score = score + add_score                                
                                 l2[int(i/2)] = -9999
                                 enemy_life = enemy_lifes
+                                ship_kills = ship_kills + 1
+                                write_id("ship_kill.txt",ship_kills)
                             #print("og")
                         elif pos_y < 285 and int(pos) >= enemy_x_pos[i] and int(pos) <= enemy_x_pos[i + 1] and l2[int(i/2)] == -9999 and l3[int(i/2)] != -9999:
-                            enemy_life = enemy_life - big_bullet - 1
+                            enemy_life = enemy_life - big_bullet - 1- easy_bull
                             space = 0
                             fire_speed = 10
-                            if enemy_life == 0:
+                            if enemy_life <= 0:
                                 score = score + add_score                                
                                 l3[int(i/2)] = -9999
-                                enemy_life = enemy_lifes                            
+                                enemy_life = enemy_lifes
+                                ship_kills = ship_kills + 1
+                                write_id("ship_kill.txt",ship_kills)                
                                 
                         elif pos_y < 185 and int(pos) >= enemy_x_pos[i] and int(pos) <= enemy_x_pos[i + 1] and l3[int(i/2)] == -9999 and l4[int(i/2)] != -9999:
-                            enemy_life = enemy_life - big_bullet - 1
+                            enemy_life = enemy_life - big_bullet - 1- easy_bull
                             space = 0
                             fire_speed = 10
                             money = money + randint(0,5)
-                            if enemy_life == 0:
+                            if enemy_life <= 0:
                                 score = score + add_score                                
                                 l4[int(i/2)] = -9999
-                                enemy_life = enemy_lifes                            
+                                enemy_life = enemy_lifes
+                                ship_kills = ship_kills + 1
+                                write_id("ship_kill.txt",ship_kills)                
                         elif pos_y < 85 and int(pos) >= enemy_x_pos[i] and int(pos) <= enemy_x_pos[i + 1] and l4[int(i/2)] == -9999 and l5[int(i/2)] != -9999:
-                            enemy_life = enemy_life - big_bullet - 1
+                            enemy_life = enemy_life - big_bullet - 1- easy_bull
                             space = 0
                             fire_speed = 10
-                            if enemy_life == 0:
+                            if enemy_life <= 0:
                                 score = score + add_score                                
                                 l5[int(i/2)] = -9999
                                 enemy_life = enemy_lifes
+                                ship_kills = ship_kills + 1
+                                write_id("ship_kill.txt",ship_kills)
                     if double_bullet == 1:
                         if (pos_y < 385 and int(pos) - 12 >= enemy_x_pos[i] and int(pos) -12 <= enemy_x_pos[i + 1] and l2[int(i/2)] != -9999) or (pos_y < 385 and int(pos) - 14 >= enemy_x_pos[i] and int(pos) - 14 <= enemy_x_pos[i + 1] and l2[int(i/2)] != -9999):
-                            enemy_life = enemy_life - big_bullet - 2
+                            enemy_life = enemy_life - big_bullet - 2- easy_bull
                             space = 0
                             fire_speed = 10
                             if enemy_life  <= 0:
                                 score = score + add_score                                
                                 l2[int(i/2)] = -9999
-                                enemy_life = enemy_lifes                            
+                                enemy_life = enemy_lifes
+                                ship_kills = ship_kills + 1
+                                write_id("ship_kill.txt",ship_kills)                
                                 #print("go")
                         elif (pos_y < 285 and int(pos) -12 >= enemy_x_pos[i] and int(pos) -12 <= enemy_x_pos[i + 1] and l2[int(i/2)] == -9999 and l3[int(i/2)] != -9999) or (pos_y < 285 and int(pos) -14 >= enemy_x_pos[i] and int(pos) -14 <= enemy_x_pos[i + 1] and l2[int(i/2)] == -9999 and l3[int(i/2)] != -9999):
-                            enemy_life = enemy_life - big_bullet - 2
+                            enemy_life = enemy_life - big_bullet - 2- easy_bull
                             space = 0
                             fire_speed = 10
                             if enemy_life <= 0:
                                 score = score + add_score                                
                                 l3[int(i/2)] = -9999
-                                enemy_life = enemy_lifes                            
+                                enemy_life = enemy_lifes
+                                ship_kills = ship_kills + 1
+                                write_id("ship_kill.txt",ship_kills)                
                         elif (pos_y < 185 and int(pos) -12 >= enemy_x_pos[i] and int(pos) -12 <= enemy_x_pos[i + 1] and l3[int(i/2)] == -9999 and l4[int(i/2)] != -9999) or (pos_y < 185 and int(pos) -14 >= enemy_x_pos[i] and int(pos) -14 <= enemy_x_pos[i + 1] and l3[int(i/2)] == -9999 and l4[int(i/2)] != -9999):
-                            enemy_life = enemy_life - big_bullet - 2
+                            enemy_life = enemy_life - big_bullet - 2- easy_bull
                             space = 0
                             fire_speed = 10
                             if enemy_life <= 0:
                                 score = score + add_score                                
                                 l4[int(i/2)] = -9999
-                                enemy_life = enemy_lifes                            
+                                enemy_life = enemy_lifes
+                                ship_kills = ship_kills + 1
+                                write_id("ship_kill.txt",ship_kills)                
                         elif (pos_y < 85 and int(pos) -12 >= enemy_x_pos[i] and int(pos) -12 <= enemy_x_pos[i + 1] and l4[int(i/2)] == -9999 and l5[int(i/2)] != -9999) or (pos_y < 85 and int(pos) -14 >= enemy_x_pos[i] and int(pos) -14 <= enemy_x_pos[i + 1] and l4[int(i/2)] == -9999 and l5[int(i/2)] != -9999):
-                            enemy_life = enemy_life - big_bullet - 2
+                            enemy_life = enemy_life - big_bullet - 2 - easy_bull
                             space = 0
                             fire_speed = 10
                             if enemy_life <= 0:
                                 score = score + add_score                                
                                 l5[int(i/2)] = -9999
-                                enemy_life = enemy_lifes                            
+                                enemy_life = enemy_lifes
+                                ship_kills = ship_kills + 1
+                                write_id("ship_kill.txt",ship_kills)                
                                         
             if y1[0] == -9999 and pop11 == 0:
                 x2.pop(len(x2) - 1)
@@ -832,6 +904,7 @@ def level1(lvl,bullet_damage,damage,enemylife):
             #print(int(pos),X)
     if lvl == 4 or lvl == 7 or lvl == 10:
         while running:
+            menu_wait = menu_wait + 1
             if move_up == 300:
                 up_score = up_score + 1
             if up_score % 30 == 1:
@@ -847,6 +920,8 @@ def level1(lvl,bullet_damage,damage,enemylife):
             life = write_id("life.txt",str(dmg))
             bullet_speed = bullet_speed + bullet_damage
             if dmg > 1290:
+                death_nbr = death_nbr + 1
+                write_id("loose_nbr.txt",death_nbr)
                 write_id("life.txt","10")
                 end_loop(lvl,life)
             xpos = print_file("pos_y")
@@ -874,8 +949,9 @@ def level1(lvl,bullet_damage,damage,enemylife):
             if pressed_keys[ord('s')]:
                 write_id("life.txt",str(level_life))
                 quit()
-            if pressed_keys[ord("m")]:
-                menu_loop()
+            if menu_wait > 200:
+                if pressed_keys[ord("m")]:
+                    menu_loop()
             screen.fill((0, 0, 0))
             screen.blit(background.surf,(0,0))
             screen.blit(player.surf,(X,Y))
@@ -910,17 +986,34 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 space = 0
                 space = space + 1
             if enemy_life <= 0:
+                boss_kills = boss_kills + 1
+                write_id("boss_kill.txt",boss_kills)
                 lvl = lvl + 1
-                money = randint(80,100)
-                if money == 97:
-                    money = 10
-                if money == 98:
-                    money = 5000
+                if diff == 1:
+                    money = randint(500,1000)
+                    if money == 87 or money == 86 or money == 85 or money == 84 or money == 83:
+                        money = 1
+                    if money == 88:
+                        money = 5000
+                if diff == 2:
+                    money = randint(500,700)
+                    if money == 57 or money == 56 or money == 55 or money == 54 or money == 53:
+                        money = 1
+                    if money == 58:
+                        money = 5000
+                if diff == 3:
+                    money = randint(300,500)
+                    if money == 47:
+                        money = 1
+                    if money == 48:
+                        money = 5000
                 write_id("money.txt",str(int(money) + int(m)))
                 if lvl != 11:
                     write_id("score.txt",str(score))
                     the_shoop(lvl,dmg)
                 if lvl == 11:
+                    win_nbr = win_nbr + 1
+                    write_id("win_nbr.txt",win_nbr)
                     write_id("score.txt",str(score))
                     win_loop(lvl,life)
             if score > int(highscore):
@@ -966,14 +1059,14 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 if double_bullet == 0:
                     #print("ok")
                     if int(pos) < 620 + boss_follow and int(pos) > 410 + boss_follow and Y  - fire_speed - 25 < 220:
-                        enemy_life = enemy_life - big_bullet - 1
+                        enemy_life = enemy_life - big_bullet - 1- easy_bull
                         score = score + add_score
                         space = 0
                         fire_speed = 10
                         #print("og")
                 if double_bullet == 1:
                     if int(pos) < 620 + boss_follow and int(pos) > 410 + boss_follow and Y  - fire_speed - 25 < 220:
-                            enemy_life = enemy_life - big_bullet - 2
+                            enemy_life = enemy_life - big_bullet - 2- easy_bull
                             if ship_lvl == "3":
                                 score = score + 2 * add_score
                             if ship_lvl == "4":
