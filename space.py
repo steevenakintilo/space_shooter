@@ -83,7 +83,7 @@ def the_shoop(lvl,life):
         if i % 100 == 0:
             check = 0
         i = i + 1
-        if pressed_keys[K_SPACE] and shop_wait > 200:
+        if pressed_keys[K_SPACE] and shop_wait > 100:
             check_level(lvl,life)
         if pressed_keys[K_1] and dollar >= 25 and check == 0 and lif > 10:
             check = 1
@@ -91,6 +91,8 @@ def the_shoop(lvl,life):
             dollar = dollar - 25
             write_id("life.txt",str(lif))
             write_id("money.txt", str(dollar))
+            if lif < 10:
+                write_id("life.txt","10")    
         if pressed_keys[K_2] and dollar >= 250 and check == 0:
             check = 1
             dollar = dollar - 250
@@ -106,9 +108,9 @@ def the_shoop(lvl,life):
             dollar = dollar - 1000
             write_id("ship.txt","4")
             write_id("money.txt", str(dollar))
-        if pressed_keys[K_5] and dollar >= 2500 and check == 0:
+        if pressed_keys[K_5] and dollar >= 2000 and check == 0:
             check = 1
-            dollar = dollar - 2500
+            dollar = dollar - 2000
             write_id("ship.txt","5")
             write_id("money.txt", str(dollar))
         screen.fill((0, 0, 0))
@@ -226,7 +228,7 @@ def level_loop():
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[ord('e')]:
             write_id("difficulty.txt","1")
-            check_level(4,10) 
+            check_level(1,10) 
         if pressed_keys[ord("m")]:
             write_id("difficulty.txt","2")
             check_level(1,10) 
@@ -284,18 +286,21 @@ def menu_loop():
     #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
-
     pygame.init()
+    pygame.mixer.music.load("main.ogg")
+    pygame.mixer.music.play(-1)
+    #pygame.mixer.Channel(1).play(pygame.mixer.Sound('main.ogg'))
     pygame.mixer.init()
     GAME_FONT = pygame.freetype.Font("arcade.ttf", 64)
-  
+    color = (0,0,0)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     X = 100
     Y = SCREEN_HEIGHT/2
-
+    stop = 0
     clock = pygame.time.Clock()
     running = True
     background = Background("menu.png")
+    m_play = 0
     while running:
         for event in pygame.event.get():
             if event.type == KEYDOWN:
@@ -305,12 +310,13 @@ def menu_loop():
                 pos = pygame.mouse.get_pos()
                 if int(pos[0]) > 470 and int(pos[0]) < 720 and int(pos[1]) > 248 and int(pos[1]) < 280:
                     write_id("enemy_life.txt","1")
-                    write_id("ship.txt","5")
+                    write_id("ship.txt","1")
                     write_id("life.txt","10")
                     write_id("money.txt","0")
                     write_id("pos_y","100")
                     write_id("score.txt","0")
                     level_loop()
+                print(pos[0],pos[1])
                 if int(pos[0]) > 462 and int(pos[0]) < 595 and int(pos[1]) > 342 and int(pos[1]) < 385:
                     if int(print_file("level.txt")) != 11:
                         check_level(int(print_file("level.txt")),int(print_file("life.txt")))
@@ -320,6 +326,16 @@ def menu_loop():
                     how_to_play_loop()
                 if int(pos[0]) > 450 and int(pos[0]) < 760 and int(pos[1]) > 448 and int(pos[1]) < 480:
                     stat_loop()
+                if int(pos[0]) > 9 and int(pos[0]) < 82 and int(pos[1]) > 635 and int(pos[1]) < 707 and stop == 0:
+                    pygame.mixer.music.stop()
+                    stop = 1
+                if stop == 1:
+                    m_play = m_play + 1
+                if int(pos[0]) > 9 and int(pos[0]) < 82 and int(pos[1]) > 635 and int(pos[1]) < 707 and stop == 1 and m_play > 1:
+                    m_play = 0
+                    pygame.mixer.music.stop()
+                    pygame.mixer.music.play(-1)
+                    stop = 0      
             elif event.type == QUIT:
                 quit()
         pressed_keys = pygame.key.get_pressed()
@@ -333,6 +349,8 @@ def menu_loop():
         GAME_FONT.render_to(screen, (460, 350), "Continue", (255,255,255))
         GAME_FONT.render_to(screen, (450, 450), "Statistic", (255,255,255))
         GAME_FONT.render_to(screen, (425, 550), "How    To    Play", (255,255,255))
+        if stop == 1:
+            pygame.draw.rect(screen, color, pygame.Rect(50,640, 50, 140))
         pygame.display.flip()
         clock.tick(30)
 
