@@ -169,6 +169,56 @@ def win_loop(lvl,life):
         clock.tick(30)
 
 
+
+def menu_loop():
+    #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
+    SCREEN_WIDTH = 1280
+    SCREEN_HEIGHT = 720
+
+    pygame.init()
+    pygame.mixer.init()
+    GAME_FONT = pygame.freetype.Font("arcade.ttf", 64)
+  
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    X = 100
+    Y = SCREEN_HEIGHT/2
+
+    clock = pygame.time.Clock()
+    running = True
+    background = Background("menu.png")
+    while running:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+                if int(pos[0]) > 470 and int(pos[0]) < 720 and int(pos[1]) > 248 and int(pos[1]) < 280:
+                    write_id("enemy_life.txt","1")
+                    write_id("ship.txt","5")
+                    write_id("life.txt","10")
+                    write_id("money.txt","0")
+                    write_id("pos_y","100")
+                    check_level(1,10)
+                if int(pos[0]) > 462 and int(pos[0]) < 595 and int(pos[1]) > 342 and int(pos[1]) < 385:
+                    check_level(int(print_file("level.txt")),int(print_file("life.txt")))
+                print(pos[0],pos[1])
+            elif event.type == QUIT:
+                quit()
+        pressed_keys = pygame.key.get_pressed()
+        if pressed_keys[ord('x')]:
+            quit()
+        if pressed_keys[K_SPACE]:
+            check_level(lvl,life)
+        screen.fill((0, 0, 0))
+        screen.blit(background.surf,(0,0))
+        GAME_FONT.render_to(screen, (470, 250), "New Game", (255,255,255))
+        GAME_FONT.render_to(screen, (460, 350), "Continue", (255,255,255))
+        GAME_FONT.render_to(screen, (450, 450), "Highscore", (255,255,255))
+        GAME_FONT.render_to(screen, (425, 550), "How    To    Play", (255,255,255))
+        pygame.display.flip()
+        clock.tick(30)
+
 def end_loop(lvl,life):
     #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
     SCREEN_WIDTH = 1280
@@ -193,10 +243,13 @@ def end_loop(lvl,life):
             elif event.type == QUIT:
                 quit()
         pressed_keys = pygame.key.get_pressed()
+        if pressed_keys[ord('x')]:
+            quit()
         if pressed_keys[K_SPACE]:
             check_level(lvl,life)
         screen.fill((0, 0, 0))
         screen.blit(background.surf,(0,0))
+        GAME_FONT.render_to(screen, (230, 550), "Press    M    TO    GO    TO    THE    MENU    AND    X    TO    QUIT", (255,255,255))
         pygame.display.flip()
         clock.tick(30)
 
@@ -210,6 +263,7 @@ def check_win(list):
 def level1(lvl,bullet_damage,damage,enemylife):
     enemy_life = int(enemylife)
     #enemy_life = 10print
+    write_id("level.txt",lvl)
     m = print_file("money.txt")
     enemy_lifes = enemy_life
     eee = print_file("life.txt")
@@ -479,7 +533,7 @@ def level1(lvl,bullet_damage,damage,enemylife):
                             enemy_life = enemy_life - big_bullet - 2
                             space = 0
                             fire_speed = 10
-                            if enemy_life == 0:
+                            if enemy_life  <= 0:
                                 enemy_life = enemy_lifes                            
                                 l2[int(i/2)] = -9999
                                 #print("go")
@@ -487,21 +541,21 @@ def level1(lvl,bullet_damage,damage,enemylife):
                             enemy_life = enemy_life - big_bullet - 2
                             space = 0
                             fire_speed = 10
-                            if enemy_life == 0:
+                            if enemy_life <= 0:
                                 enemy_life = enemy_lifes                            
                                 l3[int(i/2)] = -9999
                         elif (pos_y < 185 and int(pos) -12 >= enemy_x_pos[i] and int(pos) -12 <= enemy_x_pos[i + 1] and l3[int(i/2)] == -9999 and l4[int(i/2)] != -9999) or (pos_y < 185 and int(pos) -14 >= enemy_x_pos[i] and int(pos) -14 <= enemy_x_pos[i + 1] and l3[int(i/2)] == -9999 and l4[int(i/2)] != -9999):
                             enemy_life = enemy_life - big_bullet - 2
                             space = 0
                             fire_speed = 10
-                            if enemy_life == 0:
+                            if enemy_life <= 0:
                                 enemy_life = enemy_lifes                                
                                 l4[int(i/2)] = -9999
                         elif (pos_y < 85 and int(pos) -12 >= enemy_x_pos[i] and int(pos) -12 <= enemy_x_pos[i + 1] and l4[int(i/2)] == -9999 and l5[int(i/2)] != -9999) or (pos_y < 85 and int(pos) -14 >= enemy_x_pos[i] and int(pos) -14 <= enemy_x_pos[i + 1] and l4[int(i/2)] == -9999 and l5[int(i/2)] != -9999):
                             enemy_life = enemy_life - big_bullet - 2
                             space = 0
                             fire_speed = 10
-                            if enemy_life == 0:
+                            if enemy_life <= 0:
                                 enemy_life = enemy_lifes                                
                                 l5[int(i/2)] = -9999
                                         
@@ -728,13 +782,9 @@ def check_level(lvl,life):
     if lvl == 10:
         level1(10,40,life,200)
     
-write_id("enemy_life.txt","1")
-write_id("ship.txt","1")
-write_id("life.txt","10")
-write_id("money.txt","0")
-write_id("pos_y","100")
 system("clear")
-check_level(1,10)
+#check_level(1,10)
 life = print_file("life.txt")
 print(life)
-the_shoop(1,life)
+#the_shoop(1,life)
+menu_loop()
