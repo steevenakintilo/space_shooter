@@ -137,6 +137,44 @@ def the_shoop(lvl,life):
         clock.tick(30)
 
 
+def level_loop():
+    #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
+    SCREEN_WIDTH = 1280
+    SCREEN_HEIGHT = 720
+    write_id("win.txt","1")
+    pygame.init()
+    pygame.mixer.init()
+    GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    X = 100
+    Y = SCREEN_HEIGHT/2
+
+    clock = pygame.time.Clock()
+    running = True
+    background = Background("level.png")
+    while running:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    quit()
+            elif event.type == QUIT:
+                quit()
+        pressed_keys = pygame.key.get_pressed()
+        if pressed_keys[ord('e')]:
+            write_id("difficulty.txt","1")
+            check_level(1,10) 
+        if pressed_keys[ord("m")]:
+            write_id("difficulty.txt","2")
+            check_level(1,10) 
+        if pressed_keys[ord("h")]:
+            write_id("difficulty.txt","3")
+            check_level(1,10)  
+        screen.fill((0, 0, 0))
+        screen.blit(background.surf,(0,0))
+        GAME_FONT.render_to(screen, (230, 650), "Press    M    TO    GO    TO    THE    MENU    AND    X    TO    QUIT", (255,255,255))
+        pygame.display.flip()
+        clock.tick(30)
+
 def win_loop(lvl,life):
     #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
     SCREEN_WIDTH = 1280
@@ -209,7 +247,7 @@ def menu_loop():
                     write_id("money.txt","0")
                     write_id("pos_y","100")
                     write_id("score.txt","0")
-                    check_level(1,10)
+                    level_loop()
                 if int(pos[0]) > 462 and int(pos[0]) < 595 and int(pos[1]) > 342 and int(pos[1]) < 385:
                     if int(print_file("level.txt")) != 11:
                         check_level(int(print_file("level.txt")),int(print_file("life.txt")))
@@ -301,6 +339,8 @@ def check_win(list):
     if win == 5:
         return (1)  
 def level1(lvl,bullet_damage,damage,enemylife):
+    dif = print_file("difficulty.txt")
+    diff = int(dif)
     enemy_life = int(enemylife)
     #enemy_life = 10print
     write_id("level.txt",lvl)
@@ -378,6 +418,11 @@ def level1(lvl,bullet_damage,damage,enemylife):
         enemy = Ship("boss2.png")
     if lvl == 10:
         enemy = Ship("boss3.png")
+    if diff == 1:
+        more_damage = more_damage - int(more_damage/2)
+        big_bullet = big_bullet + 2
+    if diff == 3:
+        more_damage = more_damage + int(more_damage/2)
     background = Background("space.png")
     boss = Boss()
     running = True
@@ -516,11 +561,24 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 space = space + 1
             if check_win(last_line) == 1:
                 lvl = lvl + 1
-                money = randint(30,50)
-                if money == 47:
-                    money = 1
-                if money == 48:
-                    money = 500
+                if diff == 1:
+                    money = randint(80,100)
+                    if money == 87:
+                        money = 1
+                    if money == 88:
+                        money = 500
+                if diff == 2:
+                    money = randint(50,70)
+                    if money == 57:
+                        money = 1
+                    if money == 58:
+                        money = 500
+                if diff == 3:
+                    money = randint(30,50)
+                    if money == 47:
+                        money = 1
+                    if money == 48:
+                        money = 500
                 write_id("money.txt",str(int(money) + int(m)))
                 if lvl != 11:
                     write_id("score.txt",str(score))
