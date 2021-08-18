@@ -137,6 +137,40 @@ def the_shoop(lvl,life):
         clock.tick(30)
 
 
+
+def how_to_play_loop():
+    #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
+    SCREEN_WIDTH = 1280
+    SCREEN_HEIGHT = 720
+    write_id("win.txt","1")
+    pygame.init()
+    pygame.mixer.init()
+    GAME_FONT = pygame.freetype.Font("arcade.ttf", 44)
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    X = 100
+    Y = SCREEN_HEIGHT/2
+
+    clock = pygame.time.Clock()
+    running = True
+    background = Background("howtoplay.png")
+    while running:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    quit()
+            elif event.type == QUIT:
+                quit()
+        pressed_keys = pygame.key.get_pressed()
+        if pressed_keys[ord('m')]:
+            menu_loop()
+        if pressed_keys[ord("x")]:
+            quit() 
+        screen.fill((0, 0, 0))
+        screen.blit(background.surf,(0,0))
+        GAME_FONT.render_to(screen, (230, 670), "Press    M    TO    GO    TO    THE    MENU    AND    X    TO    QUIT", (255,255,255))
+        pygame.display.flip()
+        clock.tick(30)
+
 def level_loop():
     #pygame.mixer.Channel(0).play(pygame.mixer.Sound('win.ogg'))
     SCREEN_WIDTH = 1280
@@ -171,7 +205,6 @@ def level_loop():
             check_level(1,10)  
         screen.fill((0, 0, 0))
         screen.blit(background.surf,(0,0))
-        GAME_FONT.render_to(screen, (230, 650), "Press    M    TO    GO    TO    THE    MENU    AND    X    TO    QUIT", (255,255,255))
         pygame.display.flip()
         clock.tick(30)
 
@@ -253,6 +286,8 @@ def menu_loop():
                         check_level(int(print_file("level.txt")),int(print_file("life.txt")))
                     if int(print_file("level.txt")) == 11:
                         level_loop()
+                if int(pos[0]) > 425 and int(pos[0]) < 800 and int(pos[1]) > 548 and int(pos[1]) < 578:
+                    how_to_play_loop()
                 print(pos[0],pos[1])
             elif event.type == QUIT:
                 quit()
@@ -519,6 +554,11 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 X = X - speed_movement
             if pressed_keys[K_RIGHT] and X < 1190:
                 X = X + speed_movement
+            if pressed_keys[ord('s')]:
+                write_id("life.txt",str(level_life))
+                quit()
+            if pressed_keys[ord("m")]:
+                menu_loop()
             screen.fill((0, 0, 0))
             screen.blit(background.surf,(0,0))
             screen.blit(player.surf,(X,Y))
@@ -816,8 +856,10 @@ def level1(lvl,bullet_damage,damage,enemylife):
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
+                        write_id("life.txt",str(level_life))
                         quit()
                 elif event.type == QUIT:
+                    write_id("life.txt",str(level_life))
                     quit()
             pos_y =  Y  - fire_speed - 25
             pressed_keys = pygame.key.get_pressed()
@@ -829,6 +871,11 @@ def level1(lvl,bullet_damage,damage,enemylife):
                 X = X - speed_movement
             if pressed_keys[K_RIGHT] and X < 1190:
                 X = X + speed_movement
+            if pressed_keys[ord('s')]:
+                write_id("life.txt",str(level_life))
+                quit()
+            if pressed_keys[ord("m")]:
+                menu_loop()
             screen.fill((0, 0, 0))
             screen.blit(background.surf,(0,0))
             screen.blit(player.surf,(X,Y))
